@@ -1,7 +1,9 @@
 import { practica1Api } from "../components/practica1/index.js"
+import { practica2Api } from "../components/practica2/index.js"
 
 export const serverRoutes = ( app ) => {
     practica1Api(app)
+    practica2Api(app)
     app.get("/", (req, res, next) => {
         res.send("Todo ok")
     })
