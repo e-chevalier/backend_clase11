@@ -1,23 +1,16 @@
-const nombres = ['Luis', 'Lucía', 'Juan', 'Augusto', 'Ana']
-const apellidos = ['Pieres', 'Cacurri', 'Bezzola', 'Alberca', 'Mei']
-const colores = ['rojo', 'verde', 'azul', 'amarillo', 'magenta']
+import faker from 'faker'
 
 class Practica2 {
 
-    getRandomIndex = (max) => {
-        return Math.floor(Math.random() * (max));
-    }
-    
-
     getTenObjects = (qty = 10) => {
         let response = []
-        for (let i = 0; i <  qty; i++) {
+        for (let i = 0; i < qty; i++) {
             response.push(
                 {
-                    id: i+1,
-                    nombre: nombres[this.getRandomIndex(nombres.length)],
-                    apellido: apellidos[this.getRandomIndex(apellidos.length)],
-                    color: colores[this.getRandomIndex(colores.length)]
+                    id: i + 1,
+                    nombre: faker.name.firstName(),
+                    apellido: faker.name.lastName(),
+                    color: faker.commerce.color()
                 })
         }
         return response
@@ -26,12 +19,12 @@ class Practica2 {
 
     async test(query) {
         console.log(`test practica2 - QTY: ${query.cant}`)
-        
+
         let response = this.getTenObjects(query.cant)
-        
-        return { status: "OK", response: response}
+
+        return { status: "OK", response: response }
     }
- 
+
 }
 
 export let practica2Service = new Practica2()
