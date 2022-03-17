@@ -1,0 +1,21 @@
+[
+  {
+    "author": {
+      "id": 1,
+      "firstName": "Charly",
+      "lastName": "Garcia",
+      "edad": 70,
+      "alias": "Charly",
+      "avatar": "http://img.jpg",
+      "date": "26/1/2022 08:33:30"
+    },
+    "text": "Hola Mundo!!!"
+  },
+  {
+    "author": "CharlyGarcia@gmail.com",
+    "date": "17/3/2022 09:43:11",
+    "text": "Hola Mundo",
+    "id": null,
+    "timestamp": 1647520991543
+  }
+]

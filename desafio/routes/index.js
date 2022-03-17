@@ -1,4 +1,4 @@
-import { viewOneApi } from "../components/viewOne/index.js"
+import { viewOneApi } from '../components/viewOne/index.js'
 
 export const serverRoutes = ( app ) => {
     viewOneApi(app)

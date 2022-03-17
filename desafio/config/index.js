@@ -1,7 +1,6 @@
 import 'dotenv/config'
 
 let config = {
-    dev: process.env.NODE_ENV !== 'production',
     port: process.env.PORT
 }
 
@@ -11,6 +10,5 @@ let db = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'dbClase8'
 }
-
 
 export { config, db }

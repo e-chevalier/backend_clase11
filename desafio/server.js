@@ -1,12 +1,19 @@
 import express from 'express'
 import cors from 'cors'
-import { Contenedor } from './Contenedor.js'
+// import { Contenedor } from './Contenedor.js'
 import { Server as HttpServer } from 'http'
 import { Server as IOServer } from 'socket.io'
 import {config} from './config/index.js'
-import { config_db } from './config/database.js'
+// import { config_db } from './config/database.js'
 import { engine } from 'express-handlebars';
 import { serverRoutes } from './routes/index.js'
+
+import { productsMemory, productsContainer, messagesMemory, messagesContainer } from './daos/index.js'
+
+console.log("PRODUCTS MYSQL")
+console.table(await productsContainer.getAll())
+console.log("PRODUCTS MEMORY")
+console.table(await productsMemory.getAll())
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -45,44 +52,61 @@ httpServer.listen(PORT, () => {
 httpServer.on("error", error => console.log(`Error en servidor ${error}`))
 
 
-const contenedorProductos = new Contenedor(config_db.mysql, "products")
-await contenedorProductos.createTableProducts()
-const products = await contenedorProductos.getAll()
+// const productsContainer = new Contenedor(config_db.mysql, "products")
+// await productsContainer.createTableProducts()
+// const products = await productsContainer.getAll()
 
 
-const contenedorMensajes = new Contenedor(config_db.sqlite3, "messages")
-await contenedorMensajes.createTableMessages()
-const messages = await contenedorMensajes.getAll()
+// const messagesContainer = new Contenedor(config_db.sqlite3, "messages")
+// await messagesContainer.createTableMessages()
+// const messages = await messagesContainer.getAll()
 
 /**
  *  Regular expression for check email
  */
 
+// const onConnectionEmit = async () => {
+//     io.sockets.emit('products', await productsMemory.getAll())
+//     io.sockets.emit('messages', await messagesMemory.getAll())
+//     console.log('¡Nuevo cliente conectado!')  // - Pedido 1
+// }
+
 const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
 
 io.on('connection', (socket) => {
     // Emit all Products and Messages on connection.
-    io.sockets.emit('products', products)
-    io.sockets.emit('messages', messages)
 
-    console.log('¡Nuevo cliente conectado!')  // - Pedido 1
+    //onConnectionEmit()
+
+    (async () => {
+        io.sockets.emit('products', await productsMemory.getAll())
+        io.sockets.emit('messages', await messagesMemory.getAll())
+        console.log('¡Nuevo cliente conectado!')  // - Pedido 1
+    })()
 
     socket.on('newProduct', (prod) => {
        
         if (Object.keys(prod).length !== 0 && !Object.values(prod).includes('')) {
-            contenedorProductos.save(prod)
-            const max = products.reduce((a, b) => a.id > b.id ? a : b, { id: 0 })
-            prod.id = max.id + 1
-            products.push(prod)
-            io.sockets.emit('products', products)
+
+            (async () => {
+                await productsContainer.save(prod)
+                await productsMemory.save(prod)
+                io.sockets.emit('products', await productsMemory.getAll())
+            })()
+
         }
     })
 
     socket.on('newMessage', (data) => {
+
+        console.log(data)
+
         if (Object.keys(data).length !== 0 && re.test(data.author) && data.date !== '' && data.text !== '') {
-            messages.push(data)
-            contenedorMensajes.save(data)
-            io.sockets.emit('messages', messages)
+            (async () => {
+                await messagesMemory.save(data)
+                await messagesContainer.save(data)
+                io.sockets.emit('messages', await messagesMemory.getAll())
+            })()
         }
     })
 

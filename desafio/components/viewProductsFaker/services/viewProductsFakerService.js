@@ -1,11 +1,11 @@
 // import { productsMemory, cartsContainer, cartsMemory } from '../../../daos/index.js'
 
-class ViewOne {
+class ViewProductsFaker {
    
-    async getViewOne() {
+    async getViewProductsFaker() {
         return { status: "OK"}
     }
  
 }
 
-export let viewOneService = new ViewOne()
+export let viewProductsFakerService = new ViewProductsFaker()
