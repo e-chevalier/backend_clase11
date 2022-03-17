@@ -18,7 +18,7 @@ const print = obj => {
 
 
 
-class Practica4 {
+class Practica5 {
 
     async normalize() {
         let normalizedCompany = normalize(empresa, companySchema)
@@ -45,4 +45,4 @@ class Practica4 {
 
 }
 
-export let practica4Service = new Practica4()
+export let practica5Service = new Practica5()
