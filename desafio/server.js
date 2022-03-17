@@ -6,6 +6,7 @@ import { Server as IOServer } from 'socket.io'
 import {config} from './config/index.js'
 import { config_db } from './config/database.js'
 import { engine } from 'express-handlebars';
+import { serverRoutes } from './routes/index.js'
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -33,6 +34,9 @@ app.engine('.hbs', engine({
 app.set('views', './views'); // especifica el directorio de vistas
 app.set('view engine', '.hbs'); // registra el motor de plantillas
 
+serverRoutes(app)
+
+
 httpServer.listen(PORT, () => {
     console.log(`Servidor http escuchando en el puerto ${httpServer.address().port}
                  Open link to http://127.0.0.1:${httpServer.address().port}`)
@@ -49,14 +53,6 @@ const products = await contenedorProductos.getAll()
 const contenedorMensajes = new Contenedor(config_db.sqlite3, "messages")
 await contenedorMensajes.createTableMessages()
 const messages = await contenedorMensajes.getAll()
-
-
-//console.log(await contenedorProductos.getById(2))
-//console.log(await contenedorProductos.deleteById(2))
-//await contenedorProductos.deleteAll()
-//console.table(await contenedorProductos.getAll())
-//await contenedorProductos.updateById(2, {price: 160})
-
 
 /**
  *  Regular expression for check email
@@ -91,13 +87,6 @@ io.on('connection', (socket) => {
     })
 
 })
-
-
-app.get('/', (req, res) => {
-    res.render('main')
-})
-
-
 
 
 

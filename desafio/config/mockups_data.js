@@ -1,23 +1,27 @@
 let dataMessages = [
-    {
-        author: "CharlyGarcia@gmail.com",
-        date: "26/1/2022 08:33:30",
-        text: "¡Hola! ¿Que tal?"
+    { 
+        author: {
+            id: 'CharlyGarcia@gmail.com',
+            firstName: 'Charly',
+            lastName: 'Garcia',
+            age: '25',
+            alias: 'CharlyG',
+            avatar: 'http://imagen.jpg',
+            date: '26/1/2022 19:22:36'
+        },
+        text: 'Hola a todos!!!! ¿Como estan?'
     },
-    {
-        author: "PedroAznar@hotmail.com",
-        date: "26/1/2022 08:34:30",
-        text: "¡Muy bien! ¿Y vos?"
-    },
-    {
-        author: "GustavoCerati59@live.com",
-        date: "26/1/2022 08:36:30",
-        text: "¡Genial!"
-    },
-    {
-        author: "echevalier@gmail.com",
-        date: "26/1/2022 19:22:36",
-        text: "Hola a todos!!!! ¿Como estan?"
+    { 
+        author: {
+            id: 'PedroAznar@hotmail.com',
+            firstName: 'Pedro',
+            lastName: 'Aznar',
+            age: '35',
+            alias: 'PredusAz',
+            avatar: 'http://imagen2.jpg',
+            date: '26/1/2022 19:25:36'
+        },
+        text: '¡Muy bien! ¿Y vos?'
     }
 ]
 
