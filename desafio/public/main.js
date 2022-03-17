@@ -35,24 +35,60 @@ btnChat_submit.addEventListener('click', (e) => {
     //console.log(e.target.value)
     e.preventDefault()
     let message = {
-        author: document.getElementById('author').value,
-        date: (new Date()).toLocaleString(),
-        text: document.getElementById('message').value
+        author: {
+            id: document.getElementById('email').value,
+            name: document.getElementById('name').value,
+            surname: document.getElementById('surname').value,
+            age: document.getElementById('age').value,
+            alias: document.getElementById('alias').value,
+            avatar: document.getElementById('avatar').value,
+        },
+        text: document.getElementById('message').value,
+        date: (new Date()).toLocaleString()
     }
     document.getElementById('message').value = ""
 
     socket.emit('newMessage', message)
 })
 
-socket.on('messages', (data) => {
-    let content = data.reduce((a, b, idx) => a +
+
+
+/**
+ * Normalizr Schemas 
+ * 
+ */
+
+const authorSchema = new normalizr.schema.Entity('author')
+
+const messageSchema = new normalizr.schema.Entity('message', {
+    author: authorSchema
+})
+
+const messagesSchema = new normalizr.schema.Entity('messages', {
+    messages: [messageSchema]
+})
+
+const getSize = (obj) => {
+    return JSON.stringify(obj).length
+}
+
+socket.on('messages', (dataNormalized) => {
+
+    let dataDesnormalized = normalizr.denormalize(dataNormalized.result, messagesSchema, dataNormalized.entities)
+    console.log(JSON.stringify(dataDesnormalized).length)
+
+    let content = dataDesnormalized.messages.reduce((a, b, idx) => a +
         `<div class="d-block">
-        <strong class="d-inline text-primary">${b.author}</strong> 
+        <strong class="d-inline text-primary">${b.author.id}</strong> 
         <div class="d-inline text-danger">${b.date}</div> : 
         <em class="d-inline text-success"> ${b.text}</em>
     </div>
     `, ` `)
+
+    let porcentual = ((getSize(dataDesnormalized) - getSize(dataNormalized))*100) / getSize(dataNormalized)
+
     document.getElementById('lastMessage').innerHTML = content
+    document.getElementById('porcentual').innerHTML = porcentual.toFixed(2)+"%"
 })
 
 
@@ -60,7 +96,7 @@ socket.on('messages', (data) => {
  * Check Email from input with id="author"
  */
 
-const inputAuthor = document.getElementById('author')
+const inputAuthor = document.getElementById('email')
 
 inputAuthor.addEventListener('blur', (e) => {
     const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
