@@ -127,16 +127,19 @@ io.on('connection', (socket) => {
 
     socket.on('newMessage', (data) => {
 
-        console.log(data.author)
-        console.log(re.test(data.author.id))
-        console.log(!Object.values(data.author).includes(''))
-        console.log(data.text !== '')
+        // console.log(data.author)
+        // console.log(re.test(data.author.id))
+        // console.log(!Object.values(data.author).includes(''))
+        // console.log(data.text !== '')
 
         if (Object.keys(data).length !== 0 && re.test(data.author.id) && !Object.values(data.author).includes('') && data.text !== '') {
             (async () => {
                 await messagesMemory.save(data)
                 await messagesContainer.save(data)
-                io.sockets.emit('messages', await messagesMemory.getAll())
+
+                let messagesOriginal = await messagesMemory.getAll()
+                let messagesNormalized = normalize({id: 'messages', messages: messagesOriginal}, messagesSchema)
+                io.sockets.emit('messages', messagesNormalized)
                 //io.sockets.emit('messages', await messagesMemory.getAll())
             })()
         }
