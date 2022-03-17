@@ -1,7 +1,9 @@
 import { viewOneApi } from '../components/viewOne/index.js'
+import { viewProductsFakerApi } from '../components/viewProductsFaker/index.js'
 
 export const serverRoutes = ( app ) => {
     viewOneApi(app)
+    viewProductsFakerApi(app)
 
     app.get("/", (req, res, next) => {
         res.send("Todo ok")

@@ -1,9 +1,16 @@
-// import { productsMemory, cartsContainer, cartsMemory } from '../../../daos/index.js'
+import ProductsDaoFaker from '../../../daos/products/ProductsDaoFaker.js'
+
+const productsDaoFaker = new ProductsDaoFaker()
+
 
 class ViewProductsFaker {
-   
+       
     async getViewProductsFaker() {
-        return { status: "OK"}
+        
+        await productsDaoFaker.createProductsFaker()
+        let response = await productsDaoFaker.getAll()
+
+        return { status: "OK", data: response}
     }
  
 }
