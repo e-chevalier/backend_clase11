@@ -7,7 +7,7 @@ class ViewProductsFaker {
        
     async getViewProductsFaker() {
         
-        await productsDaoFaker.createProductsFaker()
+        productsDaoFaker.createProductsFaker()
         let response = await productsDaoFaker.getAll()
 
         return { status: "OK", data: response}

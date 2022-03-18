@@ -29,7 +29,7 @@ class ContenedorMongoDB {
     async save(obj) {
 
         try {
-            console.log(obj)
+            //console.log(obj)
             const max = Number(await this.getMaxid())
             await this.db.create({ ...obj, id: max + 1}) /* , timestamp: Date.now()  */
             return max + 1
@@ -64,7 +64,7 @@ class ContenedorMongoDB {
     async getAll() {
         try {
 
-            let res = await this.db.find({}, { '_id': 0, '__v': 0 })
+            let res = await this.db.find({}, { '_id': 0, '__v': 0 }).lean()
             return res
 
         } catch (error) {

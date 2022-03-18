@@ -46,6 +46,8 @@ async function dynamicImport(container_type) {
         // PRODUCTS DAO MEMORY
         const messagesMemory = new MessagesDaoMemory(await messagesContainer.getAll())
 
+        //console.log(await messagesMemory.getAll())
+
         return { productsContainer, productsMemory, messagesContainer, messagesMemory }
 
     } else { // default File

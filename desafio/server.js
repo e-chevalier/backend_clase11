@@ -10,10 +10,16 @@ import util from 'util'
 
 import { productsMemory, productsContainer, messagesMemory, messagesContainer } from './daos/index.js'
 
-console.log("PRODUCTS MYSQL")
-console.table(await productsContainer.getAll())
-console.log("PRODUCTS MEMORY")
-console.table(await productsMemory.getAll())
+// console.log("PRODUCTS MYSQL")
+// console.table(await productsContainer.getAll())
+// console.log("PRODUCTS MEMORY")
+// console.table(await productsMemory.getAll())
+
+
+// console.log("MESSAGES MONGODB")
+// console.log(await messagesContainer.getAll())
+// console.log("MESSAGES MEMORY")
+// console.log(await messagesMemory.getAll())
 
 const app = express()
 const httpServer = new HttpServer(app)
@@ -87,28 +93,21 @@ const print = obj => {
 io.on('connection', (socket) => {
     // Emit all Products and Messages on connection.
 
-    //onConnectionEmit()
-
     (async () => {
         io.sockets.emit('products', await productsMemory.getAll())
 
         let messagesOriginal = await messagesMemory.getAll()
-        let messagesNormalized = normalize({id: 'messages', messages: messagesOriginal}, messagesSchema)
-
+        let messagesNormalized = normalize( {id: 'messages', messages: messagesOriginal}, messagesSchema)
+      
+        // console.log("MESSAGES ORIGINAL")
         // print(messagesOriginal)
-        // console.log(JSON.stringify(messagesOriginal).length)
-        // console.log("-----------------------------------------------------------------")
+        // console.log(messagesOriginal)
 
+        // io.sockets.emit('messages', messagesNormalized)
+        // console.log("MESSAGES NORMALIZED")
         // print(messagesNormalized)
-        // console.log(JSON.stringify(messagesNormalized).length)
-        // console.log("-----------------------------------------------------------------")
+        // console.log(messagesNormalized)
 
-        // let desnormalized = denormalize(messagesNormalized.result, messagesSchema, messagesNormalized.entities)
-        // print(desnormalized)
-        // console.log(JSON.stringify(desnormalized).length)
-        // console.log("-----------------------------------------------------------------")
-
-        io.sockets.emit('messages', messagesNormalized)
         console.log('¡Nuevo cliente conectado!')  // - Pedido 1
     })()
 
@@ -127,11 +126,6 @@ io.on('connection', (socket) => {
 
     socket.on('newMessage', (data) => {
 
-        // console.log(data.author)
-        // console.log(re.test(data.author.id))
-        // console.log(!Object.values(data.author).includes(''))
-        // console.log(data.text !== '')
-
         if (Object.keys(data).length !== 0 && re.test(data.author.id) && !Object.values(data.author).includes('') && data.text !== '') {
             (async () => {
                 await messagesMemory.save(data)
@@ -140,7 +134,7 @@ io.on('connection', (socket) => {
                 let messagesOriginal = await messagesMemory.getAll()
                 let messagesNormalized = normalize({id: 'messages', messages: messagesOriginal}, messagesSchema)
                 io.sockets.emit('messages', messagesNormalized)
-                //io.sockets.emit('messages', await messagesMemory.getAll())
+
             })()
         }
     })
