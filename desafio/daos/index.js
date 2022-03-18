@@ -17,12 +17,6 @@ async function dynamicImport(container_type) {
     // PRODUCTS DAO MEMORY
     const productsMemory = new ProductsDaoMemory(await productsContainer.getAll())
 
-    // console.log("PRODUCTS MYSQL")
-    // console.table(await productsContainer.getAll())
-    // console.log("PRODUCTS MEMORY")
-    // console.table(await productsMemory.getAll())
-
-
 
     if (container_type.toUpperCase() === 'firestore'.toUpperCase()) {
         console.log("MESSAGES - Initializing container for Firestore")
@@ -46,15 +40,13 @@ async function dynamicImport(container_type) {
         // PRODUCTS DAO MEMORY
         const messagesMemory = new MessagesDaoMemory(await messagesContainer.getAll())
 
-        //console.log(await messagesMemory.getAll())
-
         return { productsContainer, productsMemory, messagesContainer, messagesMemory }
 
     } else { // default File
         console.log("MESSAGES - Initializing container for File")
     
         const { default: MessagesDaoFile } = await import('./messages/MessagesDaoFile.js')
-      
+    
         // MESSAGES DAO FILE
         const messagesContainer = new MessagesDaoFile()
 

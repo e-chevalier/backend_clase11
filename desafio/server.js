@@ -16,7 +16,7 @@ import { productsMemory, productsContainer, messagesMemory, messagesContainer } 
 // console.table(await productsMemory.getAll())
 
 
-// console.log("MESSAGES MONGODB")
+// console.log("MESSAGES CONTAINER")
 // console.log(await messagesContainer.getAll())
 // console.log("MESSAGES MEMORY")
 // console.log(await messagesMemory.getAll())
@@ -98,16 +98,8 @@ io.on('connection', (socket) => {
 
         let messagesOriginal = await messagesMemory.getAll()
         let messagesNormalized = normalize( {id: 'messages', messages: messagesOriginal}, messagesSchema)
-      
-        // console.log("MESSAGES ORIGINAL")
-        // print(messagesOriginal)
-        // console.log(messagesOriginal)
 
-        // io.sockets.emit('messages', messagesNormalized)
-        // console.log("MESSAGES NORMALIZED")
-        // print(messagesNormalized)
-        // console.log(messagesNormalized)
-
+        io.sockets.emit('messages', messagesNormalized)
         console.log('¡Nuevo cliente conectado!')  // - Pedido 1
     })()
 

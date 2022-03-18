@@ -3,7 +3,7 @@ const socket = io()
 const btnForm_submit = document.getElementById('btnForm_submit')
 
 btnForm_submit.addEventListener('click', (e) => {
-    //console.log(e.target.value)
+  
     e.preventDefault()
     let prod = {
         title: document.getElementById('title').value,
@@ -32,7 +32,7 @@ socket.on('products', (data) => {
 const btnChat_submit = document.getElementById('btnChat_submit')
 
 btnChat_submit.addEventListener('click', (e) => {
-    //console.log(e.target.value)
+   
     e.preventDefault()
     let message = {
         author: {
@@ -75,7 +75,6 @@ const getSize = (obj) => {
 socket.on('messages', (dataNormalized) => {
 
     let dataDesnormalized = normalizr.denormalize(dataNormalized.result, messagesSchema, dataNormalized.entities)
-    console.log(JSON.stringify(dataDesnormalized).length)
 
     let content = dataDesnormalized.messages.reduce((a, b, idx) => a +
         `<div class="d-block">

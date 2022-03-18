@@ -16,10 +16,8 @@ class ContenedorFireStore {
             const snapshot = await this.db.collection(this.collectionPath).orderBy('id', 'desc').limit(1).get()
                 .then(data => data.docs.map(prod => ({ id: prod.id, ...prod.data() })))
 
-            console.log(snapshot)
-
             let res = snapshot.length ? snapshot[0].id : 0
-            console.log("MAXID : " + res)
+            
             return res
 
         } catch (error) {
